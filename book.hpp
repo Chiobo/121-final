@@ -6,11 +6,13 @@
 class Book
 {
 
-public:
+private:
 	std::string title;
 	std::string authors;
 	std::string year_published;
 	std::string genre;
+
+public:
 	// constructors
 	Book();
 	Book(const std::string &ntitle, const std::string &nauthors, const std::string nyear_published, const std::string &ngenre);
@@ -29,6 +31,8 @@ public:
 
 	// print function
 	void print() const;
+
+	void update_book(const std::string &ntitle, const std::string &nauthors, const std::string nyear_published, const std::string &ngenre);
 };
 
 #endif

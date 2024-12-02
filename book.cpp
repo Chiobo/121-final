@@ -80,3 +80,12 @@ void Book::print() const
 {
 	cout << "Title: " << title << ", Authors: " << authors << ", Genre: " << genre << ", Year: " << year_published << endl;
 }
+
+void Book::update_book(const std::string &ntitle, const std::string &nauthors, const std::string nyear_published, const std::string &ngenre)
+{
+
+	title = ntitle;
+	authors = nauthors;
+	year_published = nyear_published;
+	genre = ngenre;
+}

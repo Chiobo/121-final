@@ -44,10 +44,7 @@ void Teacher::update_book_details(Library lib, const std::string &title, const s
 		return;
 	}
 
-	// update book details
-	lib.books[found_idx]->title = title;
-	lib.books[found_idx]->authors = author;
-	lib.books[found_idx]->year_published = year_published;
+	lib.books[found_idx]->update_book(title, author, year_published, genre);
 };
 
 bool Teacher::check_genre(std::string genre)
