@@ -3,36 +3,32 @@
 
 #include <string>
 
-class Book {
-    std::string title;
-    std::string authors;
-    std::string date_of_publication;
-    std::string genre;
+class Book
+{
 
-    public:
-        // constructors
-        Book();
-        Book(const std::string& ntitle, const std::string& nauthors, const std::string& ndate_of_publication);
-        Book(const std::string& ntitle, const std::string& nauthors);
-        Book(const std::string& ntitle);
+public:
+	std::string title;
+	std::string authors;
+	std::string year_published;
+	std::string genre;
+	// constructors
+	Book();
+	Book(const std::string &ntitle, const std::string &nauthors, const std::string nyear_published, const std::string &ngenre);
+	Book(const std::string &ntitle, const std::string &nauthors, const std::string nyear_published);
+	Book(const std::string &ntitle, const std::string &nauthors);
+	Book(const std::string &ntitle);
 
-        // duplicate check function
-        bool duplicateCheck(const Book new_book);
-        bool duplicatecheck(const std::string ntitle, std::string nauthors, std::string ndate_of_publication);
+	// getting functions
+	std::string get_title();
+	std::string get_author();
+	std::string get_genre();
+	std::string get_year_published();
 
-        // getting functions
-        string get_title();
-        string get_author();
-        string get_genre();
-        string get_year_published();
+	// equality operator overloading
+	bool operator==(const Book &other) const;
 
-        // equality operator overloading
-        bool operator==(const Book& other) const{};
-
-
-
-        // print function
-        void print() const;
+	// print function
+	void print() const;
 };
 
 #endif
