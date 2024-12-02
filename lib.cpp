@@ -4,73 +4,65 @@
 #include "LibraryUser.hpp"
 #include <vector>
 
-        Library::Library() : books(), is_borrowed() {};
+Library::Library() : books(), is_borrowed() {}
 
-        Library::Library(std::vector<Book*> booklist) : books(booklist) {}
+Library::Library(std::vector<Book*> booklist) : books(booklist) {
+    is_borrowed.resize(books.size(), false); // setting all boolean values in is_borrowed vector to false
+}
 
-        // book insert functions
-         bool Library::insert(Book* book){
+// book insert functions
+    bool Library::insert(Book* book){
 
-            // check: existing book with same details
-            for (int i = 0; i < books.size(); i++){
-                if (*book == *books[i]){
-                    return false;
-                }
-            }
-            
-            // inserts book into library
-            books.push_back(book);
+    // check: existing book with same details
+    for (int i = 0; i < books.size(); i++){
+        if (*book == *books[i]){
+            return false;
+        }
+    }
+    
+    // inserts book into library
+    books.push_back(book);
+    is_borrowed.reserve(books.size());
+    
 
-            // removes the book from the is_borrowed() vector
-            for (int j = 0; j < is_borrowed.size(); j++){
-                
-            }
+    return true;
+};
+
+// book remove function
+bool Library::remove(Book* book){
+
+    // check: existing book with same details
+    for (int i = 0; i < books.size(); i++){
+
+        // searches for book in library
+        if (*book == *books[i]){
+
+            // removes book from library
+            books.erase(books.begin() + i);
+            is_borrowed.erase(is_borrowed.begin() + i);
 
             return true;
-        };
+        }
+    }
+    return false;
+};
 
-        // book remove function
-        bool Library::remove(Book* book){
 
-            // check: existing book with same details
-            for (int i = 0; i < books.size(); i++){
+// borrowing book function
+void Library::borrow(LibraryUser user, string& title){
+    for (int i = 0; i < books.size(); i++) {
+        //if (*books[i].title == title && is_borrowed[i] == false && user.get_borrowed_count() < user.borrow_limit
+    }
 
-                // searches for book in library
-                if (*book == *books[i]){
-                    // removes book from library
-                    books.erase(books.begin() + i);
+// returning book function
+};
 
-                    // checking if the book is already borrowed
-                    for (int j = 0; j < is_borrowed.size(); j++){
-                        // if (*book == *is_borrowed[j]){
-                        //     std::cout << "That book is already being borrowed";
-                        // }
-                        // insert book into is_borrowed vector
-                        else {
-                            is_borrowed.push_back(book);
-                        }
-                    }
-                    return true;
-                }
-            }
-            return false;
-        };
-        
-
-        // MAKE ADVANCED_SEARCH
-
-        // borrowing book function
-        void Library::borrow(LibraryUser user, string& title){
-
-        // returning book function
-        };
-
-        void Library::print() const{
-            for (int i = 0; i < books.size(); i++){
-                std::cout << "Book Index: " << i << std::endl;
-                books[i]->print();
-            }
-        };
+void Library::print() const{
+    for (int i = 0; i < books.size(); i++){
+        std::cout << "Book Index: " << i << std::endl;
+        books[i]->print();
+    }
+};
 
 
 // Define utility function

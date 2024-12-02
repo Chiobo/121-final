@@ -5,15 +5,15 @@
 
 class LibraryUser {
     private:
-        std::string Name;
-        std::string User_ID;
+        std::string name;
+        std::string user_id;
         int borrowed_count = 0;
 
     public:
         // constructors
 
         LibraryUser(); // default constructor
-        LibraryUser(const string& name, const string& user_id);
+        LibraryUser(const std::string& name, const std::string& user_id);
         
         
         // getter functions for private class variables
@@ -44,7 +44,7 @@ class Teacher: public LibraryUser {
         Teacher(const int borrow_limit);
 
         int get_borrow_limit();
-        void add_book_to_library();
+        void add_book_to_library(Library book_list, Book* book);
         
         void print();
 };
