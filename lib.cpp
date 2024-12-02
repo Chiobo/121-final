@@ -42,9 +42,9 @@
 
                     // checking if the book is already borrowed
                     for (int j = 0; j < is_borrowed.size(); j++){
-                        if (*book == *is_borrowed[j]){
-                            std::cout << "That book is already being borrowed";
-                        }
+                        // if (*book == *is_borrowed[j]){
+                        //     std::cout << "That book is already being borrowed";
+                        // }
                         // insert book into is_borrowed vector
                         else {
                             is_borrowed.push_back(book);
@@ -71,3 +71,48 @@
                 books[i]->print();
             }
         };
+
+
+// Define utility function
+std::string to_lower(const std::string& str){
+	// Copy string
+	std::string lower_str = str;
+	std::transform(lower_str.begin(), lower_str.end(), lower_str.begin(), ::tolower);
+	return lower_str;
+}
+
+
+Book* Library::advanced_search(string& title, string& author, string& genre){
+	// Find title
+	for (int i = 0; i < books.size(); i++){
+        std::string lower_book_title = to_lower(books[i]->get_title());
+		std::string lower_title = to_lower(title);
+
+		if (lower_book_title.find(lower_title) != std::string::npos){
+			return books[i];
+		}
+	}
+
+	// find author
+	for (int i = 0; i < books.size(); i++){
+		std::string lower_book_author = to_lower(books[i]->get_author());
+		std::string lower_author = to_lower(author);
+
+		if (lower_book_author.find(lower_author) != std::string::npos){
+			return books[i];
+		}
+	}
+
+	// Find genre
+	for (int i = 0; i < books.size(); i++){
+		std::string lower_book_genre = to_lower(books[i]->get_genre());
+		std::string lower_genre = to_lower(genre);
+
+		if (lower_book_genre.find(lower_genre) != std::string::npos){
+			return books[i];
+		}
+	}
+
+	// if nothing, return nullptr
+	return nullptr;
+}

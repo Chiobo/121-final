@@ -5,6 +5,8 @@
 #include <vector>
 #include <string>
 
+using namespace std;
+
 class Library {
     private:
         std::vector<Book*> books; 
@@ -19,6 +21,8 @@ class Library {
         bool remove(Book* book);
 
         void borrow(LibraryUser user, string& title);
+
+		Book* advanced_search(string& title, string& author, string& genre);
         
         void print() const{};                          
 };
