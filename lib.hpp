@@ -1,30 +1,39 @@
 #ifndef LIB_HPP
-#define LIB_HPP  
+#define LIB_HPP
 
 #include "book.hpp"
+#include "LibraryUser.hpp"
 #include <vector>
 #include <string>
 
 using namespace std;
 
-class Library {
-    private:
-        std::vector<Book*> books; 
-        std::vector<bool> is_borrowed;
+class Library
+{
+private:
+	std::vector<bool> is_borrowed;
 
-    public:
-        Library();
-        Library(std::vector<Book*> booklist);
-        
-        bool insert(Book* book);
+public:
+	std::vector<Book *> books;
+	Library();
+	Library(std::vector<Book *> booklist);
 
-        bool remove(Book* book);
+	bool insert(Book *book);
+	bool insert(Book book);
+	bool insert(string title, string author, string year_published, string genre);
 
-        void borrow(LibraryUser user, string& title);
+	bool remove(Book *book);
+	bool remove(Book book);
+	bool remove(string title, string author, string year_published, string genre);
 
-		Book* advanced_search(string& title, string& author, string& genre);
-        
-        void print() const{};                          
+	void borrow_book(LibraryUser user, string &title);
+	void return_book(LibraryUser user, string &title);
+
+	Book *advanced_search(const string &title, const string &author, const string &genre);
+	Book *advanced_search(const string &title, const string &author);
+	Book *advanced_search(const string &title);
+
+	void print() const;
 };
 
 #endif
