@@ -1,0 +1,42 @@
+# Ignore object files, shared libraries, and executables
+*.o
+*.obj
+*.so
+*.exe
+
+# Ignore build directories
+/build/
+/bin/
+/out/
+
+# Ignore CMake build files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+
+# Ignore IDE specific files
+*.code-workspace
+*.vscode/
+*.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+*.swp
+*.bak
+*.old
+
+# Ignore compiled dynamic libraries
+*.dll
+*.dylib
+
+# Ignore coverage files
+*.gcda
+*.gcno
+*.gcov
+
+# Ignore other common files
+*.DS_Store
+Thumbs.db
