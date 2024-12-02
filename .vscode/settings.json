@@ -2,6 +2,7 @@
 	"files.associations": {
 		"*.tsx": "typescriptreact",
 		"*.graphql": "graphql",
-		"__locale": "cpp"
+		"__locale": "cpp",
+		"vector": "cpp"
 	}
 }
