@@ -1,35 +1,23 @@
-# Makefile to compile and run main.cpp
 
-# Compiler
-CXX = g++
+SRCS := $(wildcard *.cpp)
+OBJS := $(SRCS:.cpp=.o)
+DEPS := $(wildcard *.hpp)
 
-# Compiler flags
-CXXFLAGS = -Wall -g
+CXX := g++
+CXXFLAGS := -Wall -std=c++11
 
-# Target executable
-TARGET = main
+TARGET := main
 
-# Source files
-SRCS = main.cpp
-
-# Object files
-OBJS = $(SRCS:.cpp=.o)
-
-# Default target
 all: $(TARGET)
 
-# Link object files to create executable
 $(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
-# Compile source files to object files
-%.o: %.cpp
+%.o: %.cpp $(DEPS)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Clean up build files
-clean:
-	rm -f $(TARGET) $(OBJS)
-
-# Run the program
 run: $(TARGET)
 	./$(TARGET)
+
+clean:
+	rm -f $(OBJS) $(TARGET)
