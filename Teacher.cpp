@@ -9,9 +9,8 @@
 
 // defining constructors
 Teacher::Teacher() : borrow_limit() {}
-Teacher::Teacher(const std::string &name, const std::string &user_id, const int borrow_limit, const std ::vector<std::string> valid_genres)
+Teacher::Teacher(const std::string &name, const std::string &user_id, const int borrow_limit, const std ::vector<std::string> valid_genres) : LibraryUser(name, user_id)
 {
-	LibraryUser(name, user_id);
 	this->borrow_limit = borrow_limit;
 	this->valid_genres = valid_genres;
 }
@@ -26,18 +25,11 @@ void Teacher::add_book_to_library(Library books_list, Book *book)
 {
 	books_list.insert(book);
 }
+
 void Teacher::update_book_details(Library lib, const std::string &title, const std::string &author, const std::string &year_published, const std::string &genre)
 {
 	// find index of book
-	int found_idx = -1;
-	for (int i = 0; i < lib.books.size(); i++)
-	{
-		if (lib.books[i]->get_title() == title)
-		{
-			found_idx = i;
-			break;
-		}
-	}
+	int found_idx = lib.find_title(title);
 
 	if (found_idx == -1)
 	{
@@ -64,7 +56,9 @@ bool Teacher::check_genre(std::string genre)
 
 void Teacher::print()
 {
-	std::cout << "Teacher: ";
-	LibraryUser::print_user();
-	std::cout << "Borrow Limit: " << borrow_limit << std::endl;
+	std::cout << "🏫 Teacher: " << endl;
+	std::cout << indent_output("\t", [&]()
+							   { LibraryUser::print_user();
+							   
+	std::cout << "⛔ Borrow Limit: " << borrow_limit << std::endl; });
 };
