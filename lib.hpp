@@ -34,7 +34,7 @@ public:
 	void borrow_book(LibraryUser *user, const string &title);
 	void borrow_book(Student user, const string &title);
 	void borrow_book(Teacher user, const string &title);
-	void return_book(LibraryUser user, const string &title);
+	void return_book(LibraryUser *user, const string &title);
 
 	void advanced_search(const string &title, const string &author, const string &genre);
 	void advanced_search(const string &title, const string &author);
