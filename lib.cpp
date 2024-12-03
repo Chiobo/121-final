@@ -1,8 +1,10 @@
 #include <iostream>
+#include <sstream>
 #include "book.hpp"
 #include "lib.hpp"
 #include "LibraryUser.hpp"
 #include <vector>
+#include "util.hpp"
 
 Library::Library() : books(), is_borrowed() {}
 
@@ -27,8 +29,6 @@ bool Library::insert(Book *book)
 	// inserts book into library
 	books.push_back(book);
 	is_borrowed.push_back(false);
-	// is_borrowed[books.size() - 1] = false;
-	// is_borrowed.reserve(books.size());
 
 	return true;
 }
@@ -80,44 +80,35 @@ void Library::borrow_book(LibraryUser user, string &title)
 {
 
 	// Book* found_book = nullptr;
-	int found_idx = -1;
-
-	for (int i = 0; i < books.size(); i++)
-	{
-		if (books[i]->get_title() == title)
-		{
-			found_idx = i;
-			break;
-		}
-	}
+	int found_idx = find_title(title);
 
 	if (found_idx == -1)
 	{
-		std::cout << "Book not found" << std::endl;
+		std::cout << "⚠️ Book not found" << std::endl;
 		return;
 	}
 
 	if (is_borrowed[found_idx] == true)
 	{
-		std::cout << "Book is already borrowed" << std::endl;
+		std::cout << "❌ Book is already borrowed" << std::endl;
 		return;
 	}
 
 	if (user.get_borrowed_count() >= user.get_borrow_limit())
 	{
-		std::cout << "User has reached borrow limit" << std::endl;
+		std::cout << "❌ User has reached borrow limit" << std::endl;
 		return;
 	}
 
 	if (user.check_genre(books[found_idx]->get_genre()) == false)
 	{
-		std::cout << "User cannot borrow genre: " << books[found_idx]->get_genre() << std::endl;
+		std::cout << "❌ User cannot borrow genre: " << books[found_idx]->get_genre() << std::endl;
 		return;
 	}
 
 	is_borrowed[found_idx] = true;
 	user.borrow_book();
-	cout << "Book borrowed by" << user.get_name() << " - " << books[found_idx]->get_title() << endl;
+	cout << "✅ Book borrowed by" << user.get_name() << " - " << books[found_idx]->get_title() << endl;
 };
 
 // borrowing book function
@@ -125,47 +116,57 @@ void Library::return_book(LibraryUser user, string &title)
 {
 
 	// Book* found_book = nullptr;
-	int found_idx = -1;
-
-	for (int i = 0; i < books.size(); i++)
-	{
-		if (books[i]->get_title() == title)
-		{
-			found_idx = i;
-			break;
-		}
-	}
+	int found_idx = find_title(title);
 
 	if (found_idx == -1)
 	{
-		std::cout << "Book not found" << std::endl;
+		std::cout << "❌ Book not found" << std::endl;
 		return;
 	}
 
 	if (is_borrowed[found_idx] == false)
 	{
-		std::cout << "Book is not borrowed" << std::endl;
+		std::cout << "❌ Book is not borrowed" << std::endl;
 		return;
 	}
 
 	if (user.get_borrowed_count() == 0)
 	{
-		std::cout << "User has not borrowed any books" << std::endl;
+		std::cout << "❌ User has not borrowed any books" << std::endl;
 		return;
 	}
 
 	is_borrowed[found_idx] = false;
 	user.return_book();
-	cout << "Book returned by" << user.get_name() << " - " << books[found_idx]->get_title() << endl;
+	cout << "✅ Book returned by" << user.get_name() << " - " << books[found_idx]->get_title() << endl;
 };
 
-void Library::print() const
+void log_books(std::vector<Book *> books)
 {
 	for (int i = 0; i < books.size(); i++)
 	{
-		std::cout << "Book Index: " << i << std::endl;
-		books[i]->print();
+		std::cout << "ℹ️ Book Index: " << i << std::endl;
+
+		std::cout << indent_output("\t", [&]()
+								   { books[i]->print(); });
 	}
+}
+
+void Library::print() const
+{
+	log_books(books);
+}
+
+int Library::find_title(const string &title)
+{
+	for (int i = 0; i < books.size(); i++)
+	{
+		if (books[i]->get_title() == title)
+		{
+			return i;
+		}
+	}
+	return -1;
 };
 
 // Define utility function
@@ -177,64 +178,96 @@ std::string to_lower(const std::string &str)
 	return lower_str;
 }
 
-Book *Library::advanced_search(const string &title, const string &author, const string &genre)
+void print_search_results(const std::vector<Book *> &books, size_t offset, const std::string &criteria_type, const std::string &search_term)
 {
-	if (title != "")
-	{
-		// Find title
-		for (int i = 0; i < books.size(); i++)
-		{
-			std::string lower_book_title = to_lower(books[i]->get_title());
-			std::string lower_title = to_lower(title);
 
-			if (lower_book_title.find(lower_title) != std::string::npos)
-			{
-				return books[i];
-			}
-		}
-	}
-
-	if (author != "")
+	auto results = std::vector<Book *>(books.begin() + offset, books.end());
+	if (books.size() != offset)
 	{
 
-		// find author
-		for (int i = 0; i < books.size(); i++)
-		{
-			std::string lower_book_author = to_lower(books[i]->get_author());
-			std::string lower_author = to_lower(author);
-
-			if (lower_book_author.find(lower_author) != std::string::npos)
-			{
-				return books[i];
-			}
-		}
+		cout << "🔍 " << results.size() << " Books found with " << criteria_type << ": \"" << search_term << "\"" << endl;
+		cout << indent_output("\t", [&]()
+							  { log_books(results); });
 	}
-
-	if (genre != "")
+	else
 	{
 
-		// Find genre
-		for (int i = 0; i < books.size(); i++)
-		{
-			std::string lower_book_genre = to_lower(books[i]->get_genre());
-			std::string lower_genre = to_lower(genre);
-
-			if (lower_book_genre.find(lower_genre) != std::string::npos)
-			{
-				return books[i];
-			}
-		}
+		cout << "🔍 " << results.size() << " Books found with " << criteria_type << ": \"" << search_term << "\"" << endl;
 	}
-	// if nothing, return nullptr
-	return nullptr;
 }
 
-Book *Library::advanced_search(const string &title, const string &author)
+std::vector<Book *> search_by_criteria(const std::vector<Book *> &books, const std::string &search_term,
+									   const std::function<std::string(Book *)> &get_field)
+{
+	std::vector<Book *> results;
+	if (search_term.empty())
+		return results;
+
+	for (auto &book : books)
+	{
+		std::string lower_book_field = to_lower(get_field(book));
+		std::string lower_search_term = to_lower(search_term);
+		if (lower_book_field.find(lower_search_term) != std::string::npos)
+		{
+			results.push_back(book);
+		}
+	}
+	return results;
+}
+
+void Library::advanced_search(const string &title, const string &author, const string &genre)
+{
+	std::vector<Book *> found_books;
+	size_t offset = 0;
+
+	if (title.empty() && author.empty() && genre.empty())
+	{
+		cout << "🔍 No search criteria provided" << endl;
+		return;
+	}
+
+	// Search by title
+	if (!title.empty())
+	{
+		auto title_results = search_by_criteria(books, title, [](Book *b)
+												{ return b->get_title(); });
+		found_books.insert(found_books.end(), title_results.begin(), title_results.end());
+		print_search_results(found_books, offset, "title", title);
+		offset = found_books.size();
+	}
+
+	// Search by author
+	if (!author.empty())
+	{
+		auto author_results = search_by_criteria(books, author, [](Book *b)
+												 { return b->get_author(); });
+		found_books.insert(found_books.end(), author_results.begin(), author_results.end());
+		print_search_results(found_books, offset, "author", author);
+		offset = found_books.size();
+	}
+
+	// Search by genre
+	if (!genre.empty())
+	{
+		auto genre_results = search_by_criteria(books, genre, [](Book *b)
+												{ return b->get_genre(); });
+		found_books.insert(found_books.end(), genre_results.begin(), genre_results.end());
+		print_search_results(found_books, offset, "genre", genre);
+		offset = found_books.size();
+	}
+
+	if (found_books.empty())
+	{
+		cout << "⚠️ No books found" << endl;
+	}
+}
+
+void Library::advanced_search(const string &title, const string &author)
 {
 	return advanced_search(title, author, "");
 }
 
-Book *Library::advanced_search(const string &title)
+void Library::advanced_search(const string &title)
 {
 	return advanced_search(title, "", "");
 }
