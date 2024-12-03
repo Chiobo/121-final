@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "util.hpp"
 
 // Student Class
 Student::Student() : graduated(), borrow_limit() {}
