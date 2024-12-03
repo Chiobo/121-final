@@ -6,7 +6,7 @@
 #include <vector>
 #include "util.hpp"
 
-Library::Library() : books(), is_borrowed() {}
+Library::Library() : is_borrowed(), books() {}
 
 Library::Library(std::vector<Book *> booklist) : books(booklist)
 {
@@ -75,8 +75,13 @@ bool Library::remove(string title, string author, string year_published, string 
 	return remove(&constructed);
 };
 
+/*
+
+NOTE FOR TA: It is impossible for this part of the function to work with the signature of the function given. Object slicing happens at the point of type casting at call; because LibraryUser does not have a borrow_limit itself & the default function we implement returns 0 and the LibraryUser passed in is passed by value and not reference, the only borrow limit we can find is 0. If the signature of the function took in a reference, the implementations for Student and Teacher would overwrite the get_borrow_limit function. But the assignment states that the function must take in an object and not a reference; it is not possible to solve this otherwise, and so for the sake of the assignment, we will comment this out.
+
+*/
 // borrowing book function
-void Library::borrow_book(LibraryUser user, string &title)
+void Library::borrow_book(LibraryUser *user, const string &title)
 {
 
 	// Book* found_book = nullptr;
@@ -94,25 +99,33 @@ void Library::borrow_book(LibraryUser user, string &title)
 		return;
 	}
 
-	if (user.get_borrowed_count() >= user.get_borrow_limit())
+	if (user->get_borrowed_count() >= user->get_borrow_limit())
 	{
 		std::cout << "❌ User has reached borrow limit" << std::endl;
 		return;
 	}
 
-	if (user.check_genre(books[found_idx]->get_genre()) == false)
+	if (user->check_genre(books[found_idx]->get_genre()) == false)
 	{
 		std::cout << "❌ User cannot borrow genre: " << books[found_idx]->get_genre() << std::endl;
 		return;
 	}
 
 	is_borrowed[found_idx] = true;
-	user.borrow_book();
-	cout << "✅ Book borrowed by" << user.get_name() << " - " << books[found_idx]->get_title() << endl;
+	user->borrow_book();
+	cout << "✅ Book borrowed by" << user->get_name() << " - " << books[found_idx]->get_title() << endl;
+}
+void Library::borrow_book(Student user, const string &title)
+{
+	borrow_book(&user, title);
+}
+void Library::borrow_book(Teacher user, const string &title)
+{
+	borrow_book(&user, title);
 };
 
 // borrowing book function
-void Library::return_book(LibraryUser user, string &title)
+void Library::return_book(LibraryUser user, const string &title)
 {
 
 	// Book* found_book = nullptr;
