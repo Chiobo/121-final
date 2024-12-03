@@ -17,31 +17,31 @@ void print_section(const string &title)
 int main()
 {
 	print_section("Testing Book Constructors");
-    
-    // Test default constructor
-    cout << "Testing default constructor:" << endl;
-    Book default_book;
-    default_book.print();
-    
-    // Test single parameter constructor (title only)
-    cout << "\nTesting single parameter constructor:" << endl;
-    Book single_param("1984");
-    single_param.print();
-    
-    // Test two parameter constructor (title and author)
-    cout << "\nTesting two parameter constructor:" << endl;
-    Book two_param("Animal Farm", "George Orwell");
-    two_param.print();
-    
-    // Test three parameter constructor (title, author, year)
-    cout << "\nTesting three parameter constructor:" << endl;
-    Book three_param("Brave New World", "Aldous Huxley", "1932");
-    three_param.print();
-    
-    // Test four parameter constructor (title, author, year, genre)
-    cout << "\nTesting four parameter constructor:" << endl;
-    Book four_param("Lord of the Rings", "J.R.R. Tolkien", "1954", "Fantasy");
-    four_param.print();
+
+	// Test default constructor
+	cout << "Testing default constructor:" << endl;
+	Book default_book;
+	default_book.print();
+
+	// Test single parameter constructor (title only)
+	cout << "\nTesting single parameter constructor:" << endl;
+	Book single_param("1984");
+	single_param.print();
+
+	// Test two parameter constructor (title and author)
+	cout << "\nTesting two parameter constructor:" << endl;
+	Book two_param("Animal Farm", "George Orwell");
+	two_param.print();
+
+	// Test three parameter constructor (title, author, year)
+	cout << "\nTesting three parameter constructor:" << endl;
+	Book three_param("Brave New World", "Aldous Huxley", "1932");
+	three_param.print();
+
+	// Test four parameter constructor (title, author, year, genre)
+	cout << "\nTesting four parameter constructor:" << endl;
+	Book four_param("Lord of the Rings", "J.R.R. Tolkien", "1954", "Fantasy");
+	four_param.print();
 
 	// Initialize library
 	Library library;
@@ -50,9 +50,9 @@ int main()
 
 	// Create at least 5 books as required
 	Book *book1 = new Book("The Great Gatsby", "F. Scott Fitzgerald", "1925", "Fiction");
-	Book *book2 = new Book("To Kill a Mockingbird", "Harper Lee", "1960", "Fiction");
+	Book *book2 = new Book("To Kill a Mockingbird", "Harper Lee", "1960");
 	Book *book3 = new Book("Introduction to Algorithms", "Thomas H. Cormen", "1990", "Computer Science");
-	Book *book4 = new Book("Physics for Scientists", "Raymond A. Serway", "2000", "Science");
+	Book *book4 = new Book("Physics for Scientists");
 	Book *book5 = new Book("Pride and Prejudice", "Jane Austen", "1813", "Fiction");
 
 	// Test insertion
@@ -98,19 +98,14 @@ int main()
 	library.borrow_book(&student, book_title);
 
 	// Test borrowing books for teacher
-	string book_title = "To Kill A Mockingbird";
-	cout << "Student attempting to borrow '" << book_title << "'..." << endl;
-	library.borrow_book(&teacher, book_title);
-
-	book_title = "Introduction to Algorithms";
-	cout << "\nStudent attempting to borrow '" << book_title << "'..." << endl;
+	book_title = "To Kill a Mockingbird";
+	cout << "Teacher attempting to borrow out of genre: '" << book_title << "'..." << endl;
 	library.borrow_book(&teacher, book_title);
 
 	// Try to borrow beyond limit for teacher
-	book_title = "Physics for Scientists";
-	cout << "\nStudent attempting to borrow beyond limit '" << book_title << "'..." << endl;
+	book_title = "The Great Gatsby";
+	cout << "\nTeacher attempting to borrow an already borrowed book: '" << book_title << "'..." << endl;
 	library.borrow_book(&teacher, book_title);
-
 
 	print_section("Testing Book Return");
 
@@ -119,10 +114,9 @@ int main()
 	cout << "Student returning '" << book_title << "'..." << endl;
 	library.return_book(&student, book_title);
 
-
-	// Test returning a book for teacher
+	// Test returning a book for teacher [expecting to fail]
 	book_title = "Introduction to Algorithms";
-	cout << "Student returning '" << book_title << "'..." << endl;
+	cout << "Teacher returning '" << book_title << "'..." << endl;
 	library.return_book(&teacher, book_title);
 
 	print_section("Testing Advanced Search");
