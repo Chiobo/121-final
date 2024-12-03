@@ -29,11 +29,13 @@ public:
 	void borrow_book(LibraryUser user, string &title);
 	void return_book(LibraryUser user, string &title);
 
-	Book *advanced_search(const string &title, const string &author, const string &genre);
-	Book *advanced_search(const string &title, const string &author);
-	Book *advanced_search(const string &title);
+	void advanced_search(const string &title, const string &author, const string &genre);
+	void advanced_search(const string &title, const string &author);
+	void advanced_search(const string &title);
 
 	void print() const;
+
+	int find_title(const string &title);
 };
 
 #endif
