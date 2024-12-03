@@ -21,3 +21,6 @@ run: $(TARGET)
 
 clean:
 	rm -f $(OBJS) $(TARGET)
+
+clean-build:
+	rm -f $(OBJS)
