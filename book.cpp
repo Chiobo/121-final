@@ -78,7 +78,10 @@ bool Book::operator==(const Book &other) const
 // print function
 void Book::print() const
 {
-	cout << "Title: " << title << ", Authors: " << authors << ", Genre: " << genre << ", Year: " << year_published << endl;
+	cout << "🔖 Title: " << title << endl;
+	cout << "👤 Authors: " << authors << endl;
+	cout << "📅 Year Published: " << year_published << endl;
+	cout << "📚 Genre(s): " << genre << endl;
 }
 
 void Book::update_book(const std::string &ntitle, const std::string &nauthors, const std::string nyear_published, const std::string &ngenre)
