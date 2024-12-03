@@ -82,31 +82,48 @@ int main()
 	vector<string> teacher_genres = {"Fiction", "Science", "Computer Science"};
 	vector<string> student_genres = {"Fiction", "Computer Science"};
 
-	Teacher teacher("John Smith", "T001", 5, teacher_genres);
-	Student student("Alice Johnson", "S001", false, 2, student_genres);
+	Teacher teacher("John Smith", "T001", 2, teacher_genres);
+	Student student("Alice Johnson", "S001", false, 1, student_genres);
 
 	print_section("Testing Borrowing System");
 
-	// Test borrowing books
+	// Test borrowing books for student
 	string book_title = "The Great Gatsby";
 	cout << "Student attempting to borrow '" << book_title << "'..." << endl;
 	library.borrow_book(&student, book_title);
 
-	book_title = "Introduction to Algorithms";
-	cout << "\nStudent attempting to borrow '" << book_title << "'..." << endl;
-	library.borrow_book(&student, book_title);
-
-	// Try to borrow beyond limit
+	// Try to borrow beyond limit for student
 	book_title = "Pride and Prejudice";
 	cout << "\nStudent attempting to borrow beyond limit '" << book_title << "'..." << endl;
 	library.borrow_book(&student, book_title);
 
+	// Test borrowing books for teacher
+	string book_title = "To Kill A Mockingbird";
+	cout << "Student attempting to borrow '" << book_title << "'..." << endl;
+	library.borrow_book(&teacher, book_title);
+
+	book_title = "Introduction to Algorithms";
+	cout << "\nStudent attempting to borrow '" << book_title << "'..." << endl;
+	library.borrow_book(&teacher, book_title);
+
+	// Try to borrow beyond limit for teacher
+	book_title = "Physics for Scientists";
+	cout << "\nStudent attempting to borrow beyond limit '" << book_title << "'..." << endl;
+	library.borrow_book(&teacher, book_title);
+
+
 	print_section("Testing Book Return");
 
-	// Test returning a book
+	// Test returning a book for student
 	book_title = "The Great Gatsby";
 	cout << "Student returning '" << book_title << "'..." << endl;
 	library.return_book(&student, book_title);
+
+
+	// Test returning a book for teacher
+	book_title = "Introduction to Algorithms";
+	cout << "Student returning '" << book_title << "'..." << endl;
+	library.return_book(&teacher, book_title);
 
 	print_section("Testing Advanced Search");
 
