@@ -48,7 +48,6 @@ bool Library::insert(const string title, const string author, const string year_
 // book remove function
 bool Library::remove(Book *book)
 {
-
 	// check: existing book with same details
 	for (int i = 0; i < books.size(); i++)
 	{
@@ -72,19 +71,22 @@ bool Library::remove(Book book)
 bool Library::remove(string title, string author, string year_published, string genre)
 {
 	Book constructed = Book(title, author, year_published, genre);
+	// Doesn't matter that we're constructing a new book here; we're only using it to compare with the existing books
 	return remove(&constructed);
 };
 
 /*
 
-NOTE FOR TA: It is impossible for this part of the function to work with the signature of the function given. Object slicing happens at the point of type casting at call; because LibraryUser does not have a borrow_limit itself & the default function we implement returns 0 and the LibraryUser passed in is passed by value and not reference, the only borrow limit we can find is 0. If the signature of the function took in a reference, the implementations for Student and Teacher would overwrite the get_borrow_limit function. But the assignment states that the function must take in an object and not a reference; it is not possible to solve this otherwise, and so for the sake of the assignment, we will comment this out.
+IMPORTANT NOTE FOR TA:
+- The borrow_book function is impossible to implement exactly according to the assignment's spec; it must take in a reference to a LibraryUser (as does the return function)
+- The LibraryUser class doesn't have valid_genres or borrow_limit, but Student & Teacher do; for the overridden virtual functions to take precedence, the objects must be passed by reference.
+- Both borrow_book and return_book also mutate the LibraryUser's borrowed_count, which necessitates passing by reference.
 
 */
-// borrowing book function
 void Library::borrow_book(LibraryUser *user, const string &title)
 {
 
-	// Book* found_book = nullptr;
+	// Finding based on title
 	int found_idx = find_title(title);
 
 	if (found_idx == -1)
@@ -113,7 +115,7 @@ void Library::borrow_book(LibraryUser *user, const string &title)
 
 	is_borrowed[found_idx] = true;
 	user->borrow_book();
-	cout << "✅ Book borrowed by" << user->get_name() << " - " << books[found_idx]->get_title() << endl;
+	std::cout << "✅ Book borrowed by" << user->get_name() << " - " << books[found_idx]->get_title() << endl;
 }
 void Library::borrow_book(Student user, const string &title)
 {
@@ -124,11 +126,9 @@ void Library::borrow_book(Teacher user, const string &title)
 	borrow_book(&user, title);
 };
 
-// borrowing book function
+// see above note
 void Library::return_book(LibraryUser *user, const string &title)
 {
-
-	// Book* found_book = nullptr;
 	int found_idx = find_title(title);
 
 	if (found_idx == -1)
@@ -154,6 +154,7 @@ void Library::return_book(LibraryUser *user, const string &title)
 	cout << "✅ Book returned by " << user->get_name() << " - " << books[found_idx]->get_title() << endl;
 };
 
+// We extract a generic log_books function to avoid code duplication; used in the Library::print function as well as the searching func
 void log_books(std::vector<Book *> books)
 {
 	for (int i = 0; i < books.size(); i++)
@@ -181,15 +182,6 @@ int Library::find_title(const string &title)
 	}
 	return -1;
 };
-
-// Define utility function
-std::string to_lower(const std::string &str)
-{
-	// Copy string
-	std::string lower_str = str;
-	std::transform(lower_str.begin(), lower_str.end(), lower_str.begin(), ::tolower);
-	return lower_str;
-}
 
 void print_search_results(const std::vector<Book *> &books, size_t offset, const std::string &criteria_type, const std::string &search_term)
 {
