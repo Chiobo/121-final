@@ -16,6 +16,33 @@ void print_section(const string &title)
 
 int main()
 {
+	print_section("Testing Book Constructors");
+    
+    // Test default constructor
+    cout << "Testing default constructor:" << endl;
+    Book default_book;
+    default_book.print();
+    
+    // Test single parameter constructor (title only)
+    cout << "\nTesting single parameter constructor:" << endl;
+    Book single_param("1984");
+    single_param.print();
+    
+    // Test two parameter constructor (title and author)
+    cout << "\nTesting two parameter constructor:" << endl;
+    Book two_param("Animal Farm", "George Orwell");
+    two_param.print();
+    
+    // Test three parameter constructor (title, author, year)
+    cout << "\nTesting three parameter constructor:" << endl;
+    Book three_param("Brave New World", "Aldous Huxley", "1932");
+    three_param.print();
+    
+    // Test four parameter constructor (title, author, year, genre)
+    cout << "\nTesting four parameter constructor:" << endl;
+    Book four_param("Lord of the Rings", "J.R.R. Tolkien", "1954", "Fantasy");
+    four_param.print();
+
 	// Initialize library
 	Library library;
 
