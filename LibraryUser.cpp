@@ -6,9 +6,8 @@
 
 // defining constructors
 LibraryUser::LibraryUser() : name(), user_id(), borrowed_count(0) {} // default constructor
-LibraryUser::LibraryUser(const std::string &name, const std::string &user_id)
+LibraryUser::LibraryUser(const std::string &name, const std::string &user_id) : LibraryUser()
 {
-	LibraryUser();
 	this->name = name;
 	this->user_id = user_id;
 }
@@ -19,7 +18,7 @@ std::string LibraryUser::get_name()
 	return name;
 };
 
-std::string LibraryUser::User_ID()
+std::string LibraryUser::get_user_id()
 {
 	return user_id;
 };
@@ -47,15 +46,17 @@ void LibraryUser::return_book()
 
 void LibraryUser::print_user()
 {
-	std::cout << "Username: " << name << "User_ID: " << user_id << "Borrowed Count: " << borrowed_count << std::endl;
+	std::cout << "🏷️ Name: " << name << std::endl;
+	std::cout << "👤 User ID: " << user_id << std::endl;
+	std::cout << "🔢 Borrowed Count: " << borrowed_count << std::endl;
 };
+
 int LibraryUser::get_borrow_limit()
 {
-	std::cout << "Borrow Limit: 0" << std::endl;
 	return 0;
 }
+
 bool LibraryUser::check_genre(std::string genre)
 {
-
 	return true;
 };
