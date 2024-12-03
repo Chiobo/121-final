@@ -45,6 +45,7 @@ int main()
 	// Test book removal
 	cout << "Removing 'Physics for Scientists'..." << endl;
 	library.remove(book4);
+
 	cout << "\nLibrary contents after removal:" << endl;
 	library.print();
 
