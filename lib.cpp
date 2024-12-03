@@ -183,24 +183,24 @@ int Library::find_title(const string &title)
 	return -1;
 };
 
-void print_search_results(const std::vector<Book *> &books, size_t offset, const std::string &criteria_type, const std::string &search_term)
+// Utility function for advanced search: takes in the relevant books, criteria (i.e. title, author or genre), and the search term and logs them with correct indentation
+void print_search_results(const std::vector<Book *> &books, const std::string &criteria_type, const std::string &search_term)
 {
-
-	auto results = std::vector<Book *>(books.begin() + offset, books.end());
-	if (books.size() != offset)
+	if (books.size() != 0)
 	{
 
-		cout << "🔍 " << results.size() << " Books found with " << criteria_type << ": \"" << search_term << "\"" << endl;
+		cout << "🔍 " << books.size() << " Books found with " << criteria_type << ": \"" << search_term << "\"" << endl;
 		cout << indent_output("\t", [&]()
-							  { log_books(results); });
+							  { log_books(books); });
 	}
 	else
 	{
 
-		cout << "🔍 " << results.size() << " Books found with " << criteria_type << ": \"" << search_term << "\"" << endl;
+		cout << "🔍 " << books.size() << " Books found with " << criteria_type << ": \"" << search_term << "\"" << endl;
 	}
 }
 
+// Function takes in a list of books, the search term, and the field that we're looking at (i.e. a function to resolve the field); it then runs through the array, comparing the resolved field to the search term and returns the list of possible values.
 std::vector<Book *> search_by_criteria(const std::vector<Book *> &books, const std::string &search_term,
 									   const std::function<std::string(Book *)> &get_field)
 {
@@ -210,6 +210,7 @@ std::vector<Book *> search_by_criteria(const std::vector<Book *> &books, const s
 
 	for (auto &book : books)
 	{
+		// the use of to_lower allows us to make searching case-insensitive
 		std::string lower_book_field = to_lower(get_field(book));
 		std::string lower_search_term = to_lower(search_term);
 		if (lower_book_field.find(lower_search_term) != std::string::npos)
@@ -220,6 +221,10 @@ std::vector<Book *> search_by_criteria(const std::vector<Book *> &books, const s
 	return results;
 }
 
+// Full advanced search:
+// Because we need to keep track of ALL possibilities, we have a vector with the found books as an accumulator
+// And an offset that we use to segment the found books by search criterion (i..e title, author, genre)
+// For each search criterion, we run the search_by criteria and use the resuls to print the search results
 void Library::advanced_search(const string &title, const string &author, const string &genre)
 {
 	std::vector<Book *> found_books;
@@ -231,23 +236,34 @@ void Library::advanced_search(const string &title, const string &author, const s
 		return;
 	}
 
-	// Search by title
+	// Search by title - only valid if title isn't "" or nullptr
 	if (!title.empty())
 	{
+
+		// First we get the results of the search by title; the last argument is a lambda that returns the title
 		auto title_results = search_by_criteria(books, title, [](Book *b)
 												{ return b->get_title(); });
+		// Add the results to the found_books vector (this lets us have a source of truth)
 		found_books.insert(found_books.end(), title_results.begin(), title_results.end());
-		print_search_results(found_books, offset, "title", title);
+
+		// Then offset the books for this specific criterion (in this case, the offset is unnecessary) - then log the results
+		print_search_results(found_books, "title", title);
+
+		// Increment the offset to the end of the array
 		offset = found_books.size();
 	}
 
 	// Search by author
 	if (!author.empty())
 	{
+
 		auto author_results = search_by_criteria(books, author, [](Book *b)
 												 { return b->get_author(); });
 		found_books.insert(found_books.end(), author_results.begin(), author_results.end());
-		print_search_results(found_books, offset, "author", author);
+
+		// In the case of authors, the offset is necessary to segment the results effectively
+		auto offset_books = std::vector<Book *>(found_books.begin() + offset, found_books.end());
+		print_search_results(offset_books, "author", author);
 		offset = found_books.size();
 	}
 
@@ -257,7 +273,8 @@ void Library::advanced_search(const string &title, const string &author, const s
 		auto genre_results = search_by_criteria(books, genre, [](Book *b)
 												{ return b->get_genre(); });
 		found_books.insert(found_books.end(), genre_results.begin(), genre_results.end());
-		print_search_results(found_books, offset, "genre", genre);
+		auto offset_books = std::vector<Book *>(found_books.begin() + offset, found_books.end());
+		print_search_results(offset_books, "genre", genre);
 		offset = found_books.size();
 	}
 
@@ -267,6 +284,7 @@ void Library::advanced_search(const string &title, const string &author, const s
 	}
 }
 
+// Overloads in cases where not all search criteria are provided
 void Library::advanced_search(const string &title, const string &author)
 {
 	return advanced_search(title, author, "");
