@@ -125,7 +125,7 @@ void Library::borrow_book(Teacher user, const string &title)
 };
 
 // borrowing book function
-void Library::return_book(LibraryUser user, const string &title)
+void Library::return_book(LibraryUser *user, const string &title)
 {
 
 	// Book* found_book = nullptr;
@@ -143,15 +143,15 @@ void Library::return_book(LibraryUser user, const string &title)
 		return;
 	}
 
-	if (user.get_borrowed_count() == 0)
+	if (user->get_borrowed_count() == 0)
 	{
 		std::cout << "❌ User has not borrowed any books" << std::endl;
 		return;
 	}
 
 	is_borrowed[found_idx] = false;
-	user.return_book();
-	cout << "✅ Book returned by" << user.get_name() << " - " << books[found_idx]->get_title() << endl;
+	user->return_book();
+	cout << "✅ Book returned by " << user->get_name() << " - " << books[found_idx]->get_title() << endl;
 };
 
 void log_books(std::vector<Book *> books)
