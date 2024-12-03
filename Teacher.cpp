@@ -52,8 +52,6 @@ bool Teacher::check_genre(std::string genre)
 	return false;
 };
 
-// defining print
-
 void Teacher::print()
 {
 	std::cout << "🏫 Teacher: " << endl;
