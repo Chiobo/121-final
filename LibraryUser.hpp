@@ -20,7 +20,7 @@ public:
 	// getter functions for private class variables
 	std::string get_name();
 
-	std::string User_ID();
+	std::string get_user_id();
 
 	int get_borrowed_count();
 
